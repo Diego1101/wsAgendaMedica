@@ -93,6 +93,13 @@
 <div id="scheduleC">  
     <div align="center">
         <h2>Agenda</h2>
+        <div class="mt-2" style="color: #412ecc;">
+            <%
+                if(request.getAttribute("res")!=null){
+                    out.println(request.getAttribute("res"));
+                }
+            %>
+        </div>
     </div>
     <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
         <div class="cd-schedule__timeline">
