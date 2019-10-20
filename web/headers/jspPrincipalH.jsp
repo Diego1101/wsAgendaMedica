@@ -8,7 +8,7 @@
 
 <!---Start navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar fixed-top  navbar-light bg-light">
-        <a class="navbar-brand" href="#Welcome">
+        <a class="navbar-brand" href="index.jsp">
             <img src="images/logo.png" width="50" height="50" class="d-inline-block" alt=""> Agenda medica
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">

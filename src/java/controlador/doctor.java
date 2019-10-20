@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.clsCita;
 import modelo.clsDoctor;
+import modelo.clsEspecialidad;
 
 /**
  *
@@ -56,6 +57,23 @@ public class doctor extends HttpServlet {
             case "terminarCita":
                 modEsCita(request, response);
                 break;
+            case "infoMedicos":
+                listarEspecialidades(request, response);
+                //listarMedicos();
+                //
+                request.setAttribute("ban", "1");
+                request.setAttribute("pag", "jspMedicos.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+                break;
+
+            case "regMedico":
+                regMedico(request, response);
+                listarEspecialidades(request, response);
+                request.setAttribute("ban", "1");
+                request.setAttribute("pag", "jspMedicos.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
 
             default:
                 break;
@@ -63,42 +81,117 @@ public class doctor extends HttpServlet {
         }
     }
 
-    
-    protected void modEsCita(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
-        
+    protected void listarEspecialidades(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            
-            String resultado="";
-            clsCita obj = new clsCita();
+            clsEspecialidad obj = new clsEspecialidad();
             obj.conexion();
-            if(request.getParameter("btnCancelar")!=null){
-                if(obj.cancelarCita(id).equals("1")){
-                    resultado="Cita cancelada";
-                }else if(obj.cancelarCita(id).equals("2")){
-                    resultado="No se puede cancelar el mismo dia";
-                }
-            }else if(request.getParameter("btnConfirmar")!=null){
-                if(obj.confirmarCita(id).equals("1")){
-                    resultado="Cita confirmada";
-                }
-                
-            }else if(request.getParameter("btnTerminar")!=null){
-                if(obj.terminarCita(id).equals("1")){
-                    resultado="Cita terminada";
-                }
-                
+            ResultSet rs = obj.listarEsp();
+
+            List<String[]> esp = new ArrayList();
+
+            while (rs.next()) {
+                String[] aux=new String[2];
+                aux[0]=rs.getString(1);
+                aux[1]=rs.getString(2);
+                esp.add(aux);
+            }
+            rs.close();
+            request.setAttribute("esp", esp);
+        } catch (SQLException ex) {
+            Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    protected void regMedico(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            String nombre = request.getParameter("txtNombre");
+            String ap = request.getParameter("txtApellidos");
+            String user = request.getParameter("txtUser");
+            String correo = request.getParameter("txtCorreo");
+            String pass = request.getParameter("txtPass");
+            String estudios = request.getParameter("txtEstudios");
+            String esp=request.getParameter("dpEspecialidad");
+            
+            String horario="";
+            for(int i=9;i<=18;i++){
+                horario+=request.getParameter("l"+i);
+            }
+            for(int i=9;i<=18;i++){
+                horario+=request.getParameter("m"+i);
+            }
+            for(int i=9;i<=18;i++){
+                horario+=request.getParameter("i"+i);
+            }
+            for(int i=9;i<=18;i++){
+                horario+=request.getParameter("j"+i);
+            }
+            for(int i=9;i<=18;i++){
+                horario+=request.getParameter("v"+i);
+            }
+            for(int i=9;i<=18;i++){
+                horario+=request.getParameter("s"+i);
             }
             
+            clsDoctor doc = new clsDoctor();
+            doc.conexion();
+            String res=doc.regDoctor(nombre, ap, user, pass, correo, estudios, Integer.parseInt(esp), horario);
+            System.out.println("es: "+ res);
+            if("0".equals(res)){
+                 request.setAttribute("es", "El usuario ya existe");
+            }
+            if("1".equals(res)){
+                 request.setAttribute("es", "Medico agregado");
+            }
+            else{
+                request.setAttribute("es", "Error");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    protected void modEsCita(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            String resultado = "";
+            clsCita obj = new clsCita();
+            obj.conexion();
+            if (request.getParameter("btnCancelar") != null) {
+                if (obj.cancelarCita(id).equals("1")) {
+                    resultado = "Cita cancelada";
+                } else if (obj.cancelarCita(id).equals("2")) {
+                    resultado = "No se puede cancelar el mismo dia";
+                }
+            } else if (request.getParameter("btnConfirmar") != null) {
+                if (obj.confirmarCita(id).equals("1")) {
+                    resultado = "Cita confirmada";
+                }
+
+            } else if (request.getParameter("btnTerminar") != null) {
+                if (obj.terminarCita(id).equals("1")) {
+                    resultado = "Cita terminada";
+                }
+
+            }
+
             request.setAttribute("res", resultado);
             listarCitas(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     protected void verDetalle(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

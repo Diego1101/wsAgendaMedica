@@ -79,5 +79,21 @@ public class clsDoctor extends clsUsuario {
         rs = st.executeQuery(consultaSql);
         return rs;
     }
+    
+    public String regDoctor(String nombre, String ap, String usuario, String contra, String correo, String estudios, int esp, String horario) throws SQLException {
+        String consultaSql;
+        Statement st;
+        consultaSql = "call tspRegistrarDoctor('"+nombre+"','"+ap+"','"+usuario+"','"+contra+"','"+correo+"','"+estudios+"',"+esp+",'"+horario+"')";
+        System.out.println(consultaSql);
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        String res="-1";
+        while(rs.next()){
+            res=rs.getString(1);
+        }
+        rs.close();
+        return res;
+    }
+    
 
 }
