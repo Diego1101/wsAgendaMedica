@@ -92,3 +92,40 @@ footer{
 	bottom: 0px;
 	padding-top: 20px;
 }
+
+#scheduleC{
+    margin-top: 100px;
+}
+
+.horario table{
+    color: black;
+    width: 100%;
+    background-color: white; 
+    margin-top: 1rem;
+}
+.horario table td{
+    border: solid 2px black;
+}
+
+.horario input[type="checkbox"]{
+    /*display:none;*/
+}
+
+
+
+.horario .active{
+    background-color: green;
+}
+
+
+
+
+
+
+
+
+.horario td .enable{
+    background-color: green;
+}
+
+

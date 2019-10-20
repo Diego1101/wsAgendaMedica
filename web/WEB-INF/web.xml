@@ -4,9 +4,17 @@
         <servlet-name>paciente</servlet-name>
         <servlet-class>controlador.paciente</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>doctor</servlet-name>
+        <servlet-class>controlador.doctor</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>paciente</servlet-name>
         <url-pattern>/paciente.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>doctor</servlet-name>
+        <url-pattern>/doctor.do</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

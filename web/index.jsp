@@ -15,7 +15,6 @@
     
     if(request.getSession().getAttribute("rol")!=null){
         rol=request.getSession().getAttribute("rol").toString();
-        System.out.println("rol: "+rol);
         if(rol.equals("2")){
             rol="headers/jspDoctorH.jsp";
             dir="doctor/";
@@ -48,9 +47,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/styleC.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link href='https://fonts.googleapis.com/css?family=Merienda' rel='stylesheet'>
         <link href="css/aos.css" rel="stylesheet">
+        
 
         <title>Agenda medica</title>
         <link rel="icon" href="images/logo.png">
@@ -85,14 +86,16 @@
                 </div>
             </div>
         </footer>
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <script type="text/javascript" src="js/map.js"></script>
         <script type="text/javascript" src="js/smooth-scroll.js"></script>
-        <script src="js/aos.js"></script>
+        <%//<script src="js/aos.js"></script>%>
+        <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
         <script type="text/javascript" src="js/image-effect.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFZjOV0KA68G2YAh-rn7I3qKqCQEh_Ja0&callback=myMap">
+        <script src="js/util.js"></script>
+        <script src="js/main.js"></script>
         </script>
 
     </body>
