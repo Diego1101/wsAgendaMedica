@@ -92,9 +92,9 @@ public class doctor extends HttpServlet {
             List<String[]> esp = new ArrayList();
 
             while (rs.next()) {
-                String[] aux=new String[2];
-                aux[0]=rs.getString(1);
-                aux[1]=rs.getString(2);
+                String[] aux = new String[2];
+                aux[0] = rs.getString(1);
+                aux[1] = rs.getString(2);
                 esp.add(aux);
             }
             rs.close();
@@ -115,42 +115,41 @@ public class doctor extends HttpServlet {
             String correo = request.getParameter("txtCorreo");
             String pass = request.getParameter("txtPass");
             String estudios = request.getParameter("txtEstudios");
-            String esp=request.getParameter("dpEspecialidad");
-            
-            String horario="";
-            for(int i=9;i<=18;i++){
-                horario+=request.getParameter("l"+i);
+            String esp = request.getParameter("dpEspecialidad");
+
+            String horario = "";
+            for (int i = 9; i <= 18; i++) {
+                horario += request.getParameter("l" + i);
             }
-            for(int i=9;i<=18;i++){
-                horario+=request.getParameter("m"+i);
+            for (int i = 9; i <= 18; i++) {
+                horario += request.getParameter("m" + i);
             }
-            for(int i=9;i<=18;i++){
-                horario+=request.getParameter("i"+i);
+            for (int i = 9; i <= 18; i++) {
+                horario += request.getParameter("i" + i);
             }
-            for(int i=9;i<=18;i++){
-                horario+=request.getParameter("j"+i);
+            for (int i = 9; i <= 18; i++) {
+                horario += request.getParameter("j" + i);
             }
-            for(int i=9;i<=18;i++){
-                horario+=request.getParameter("v"+i);
+            for (int i = 9; i <= 18; i++) {
+                horario += request.getParameter("v" + i);
             }
-            for(int i=9;i<=18;i++){
-                horario+=request.getParameter("s"+i);
+            for (int i = 9; i <= 18; i++) {
+                horario += request.getParameter("s" + i);
             }
-            
+
             clsDoctor doc = new clsDoctor();
             doc.conexion();
-            String res=doc.regDoctor(nombre, ap, user, pass, correo, estudios, Integer.parseInt(esp), horario);
-            System.out.println("es: "+ res);
-            if("0".equals(res)){
-                 request.setAttribute("es", "El usuario ya existe");
+            String res = doc.regDoctor(nombre, ap, user, pass, correo, estudios, Integer.parseInt(esp), horario);
+            System.out.println("es: " + res);
+            if ("0".equals(res)) {
+                request.setAttribute("es", "El usuario ya existe");
             }
-            if("1".equals(res)){
-                 request.setAttribute("es", "Medico agregado");
-            }
-            else{
+            if ("1".equals(res)) {
+                request.setAttribute("es", "Medico agregado");
+            } else {
                 request.setAttribute("es", "Error");
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -216,10 +215,9 @@ public class doctor extends HttpServlet {
                     out.println(rs.getString(2));
                     out.println("</h3>");
 
-                    out.println("<h3 class='my-2'>");
-                    out.println("Telefono");
-                    out.println("</h3>");
-
+//                    out.println("<h3 class='my-2'>");
+//                    out.println("Telefono");
+//                    out.println("</h3>");
                     out.println("<p class='my-5'>");
                     out.println(rs.getString(3));
                     out.println("</p>");
@@ -230,8 +228,8 @@ public class doctor extends HttpServlet {
                         out.println("<form action='doctor.do' method='post'>");
                         out.println("<input type='hidden' id='org' name='org' value='confirmarCita'>");
                         out.println("<input type='hidden' id='id' name='id' value='" + id + "'>");
-                        out.println("<input type='submit' id='btnConfirmar' name='btnConfirmar' value='Confirmar' class='btn  btn-block btn-success'>");
-                        out.println("<input type='submit' id='btnCancelar' name='btnCancelar' value='Cancelar' class='btn  btn-block btn-danger'>");
+                        out.println("<input type='submit' id='btnConfirmar' name='btnConfirmar' value='Confirmar' class='btn  btn-block btn-success' style='color: inherit;'>");
+                        out.println("<input type='submit' id='btnCancelar' name='btnCancelar' value='Cancelar' class='btn  btn-block btn-danger' style='color: inherit;'>");
                         out.println("</form>");
 
                     } else if ("2".equals(rs.getString(4))) {//termianda
@@ -239,10 +237,10 @@ public class doctor extends HttpServlet {
 
                     } else if ("3".equals(rs.getString(4))) {//confirmada
                         out.println("<form action='doctor.do' method='post'>");
-                        out.println("<input type='hidden' id='org' name='org' value='terminarCita'>");
+                        out.println("<input type='hidden' id='org' name='org' value='terminarCita' >");
                         out.println("<input type='hidden' id='id' name='id' value='" + id + "'>");
-                        out.println("<input type='submit' id='btnTerminar' name='btnTerminar' value='Terminar' class='btn  btn-block btn-primary'>");
-                        out.println("<input type='submit' id='btnCancelar' name='btnCancelar' value='Cancelar' class='btn  btn-block btn-danger'>");
+                        out.println("<input type='submit' id='btnTerminar' name='btnTerminar' value='Terminar' class='btn  btn-block btn-primary' style='color: inherit;'>");
+                        out.println("<input type='submit' id='btnCancelar' name='btnCancelar' value='Cancelar' class='btn  btn-block btn-danger' style='color: inherit;'>");
                         out.println("</form>");
 
                     }
@@ -266,8 +264,13 @@ public class doctor extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            String sem = "0";
+            if (request.getParameter("sem") != null) {
+                sem = request.getParameter("sem");
+
+            }
             clsDoctor doc = new clsDoctor(Integer.parseInt(request.getSession().getAttribute("id").toString()));
-            ResultSet dat = doc.listarCitas(0);
+            ResultSet dat = doc.listarCitas(Integer.parseInt(sem));
             List<String[]> citas = new ArrayList<>();
             while (dat.next()) {
                 String[] r = new String[5];
@@ -279,6 +282,7 @@ public class doctor extends HttpServlet {
                 citas.add(r);
             }
 
+            request.setAttribute("sem", sem);
             request.setAttribute("citas", citas);
             dat.close();
 

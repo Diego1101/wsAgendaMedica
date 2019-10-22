@@ -23,7 +23,6 @@
 
         List<String[]> citas = (List<String[]>) request.getAttribute("citas");
 
-
         for (String[] cita : citas) {
             if (cita[0].equals("2")) {
                 lunes += "<li class='cd-schedule__event'>";
@@ -31,36 +30,31 @@
                 lunes += "<em class='cd-schedule__name'>" + cita[2] + "</em>";
                 lunes += "</a>";
                 lunes += "</li>";
-            }
-            else if (cita[0].equals("3")) {
+            } else if (cita[0].equals("3")) {
                 martes += "<li class='cd-schedule__event'>";
                 martes += "<a data-start='" + cita[1] + ":00' data-end='" + (Integer.parseInt(cita[1]) + 1) + ":00' data-content='" + cita[4] + "' data-event='event-" + cita[3] + "' href='#0'>";
                 martes += "<em class='cd-schedule__name'>" + cita[2] + "</em>";
                 martes += "</a>";
                 martes += "</li>";
-            }
-            else if (cita[0].equals("4")) {
+            } else if (cita[0].equals("4")) {
                 miercoles += "<li class='cd-schedule__event'>";
                 miercoles += "<a data-start='" + cita[1] + ":00' data-end='" + (Integer.parseInt(cita[1]) + 1) + ":00' data-content='" + cita[4] + "' data-event='event-" + cita[3] + "' href='#0'>";
                 miercoles += "<em class='cd-schedule__name'>" + cita[2] + "</em>";
                 miercoles += "</a>";
                 miercoles += "</li>";
-            }
-            else if (cita[0].equals("5")) {
+            } else if (cita[0].equals("5")) {
                 jueves += "<li class='cd-schedule__event'>";
                 jueves += "<a data-start='" + cita[1] + ":00' data-end='" + (Integer.parseInt(cita[1]) + 1) + ":00' data-content='" + cita[4] + "' data-event='event-" + cita[3] + "' href='#0'>";
                 jueves += "<em class='cd-schedule__name'>" + cita[2] + "</em>";
                 jueves += "</a>";
                 jueves += "</li>";
-            }
-            else if (cita[0].equals("6")) {
+            } else if (cita[0].equals("6")) {
                 viernes += "<li class='cd-schedule__event'>";
                 viernes += "<a data-start='" + cita[1] + ":00' data-end='" + (Integer.parseInt(cita[1]) + 1) + ":00' data-content='" + cita[4] + "' data-event='event-" + cita[3] + "' href='#0'>";
                 viernes += "<em class='cd-schedule__name'>" + cita[2] + "</em>";
                 viernes += "</a>";
                 viernes += "</li>";
-            }
-            else if (cita[0].equals("7")) {
+            } else if (cita[0].equals("7")) {
                 sabado += "<li class='cd-schedule__event'>";
                 sabado += "<a data-start='" + cita[1] + ":00' data-end='" + (Integer.parseInt(cita[1]) + 1) + ":00' data-content='" + cita[4] + "' data-event='event-" + cita[3] + "' href='#0'>";
                 sabado += "<em class='cd-schedule__name'>" + cita[2] + "</em>";
@@ -73,8 +67,21 @@
 
 %>
 
+<%    String sem = "0";
+    if (request.getParameter("sem") != null) {
+        sem = request.getParameter("sem").toString();
+    }
+
+    String semA = "0";
+    if (request.getAttribute("sem") != null) {
+        semA = request.getAttribute("sem").toString();
+    }
+
+%>
+
 <form action="doctor.do" method="post" id="citas" name="citas">
     <input type="hidden" id="org" name="org" value="listarCitas">
+    <input type="hidden" id="sem" name="sem" value="<%=sem%>">
 </form>
 
 <%    if (request.getAttribute("ban") == null || request.getAttribute("ban").equals("0")) {
@@ -91,16 +98,28 @@
 <script>document.getElementsByTagName("html")[0].className += " js";</script>
 
 <div id="scheduleC">  
-    <div align="center">
-        <h2>Agenda</h2>
-        <div class="mt-2" style="color: #412ecc;">
-            <%
-                if(request.getAttribute("res")!=null){
-                    out.println(request.getAttribute("res"));
-                }
-            %>
+    <div class="container">
+        <div class="row" align="center">
+            <div class="col-2">
+                <a href="index.jsp?pag=jspCitasD.jsp&sem=<%=Integer.parseInt(semA) - 1%>"><span class="carousel-control-prev-icon" aria-hidden="true"></span></a>
+            </div>
+            <div class="col-8">
+                <h2>Agenda</h2>
+                <div class="mt-2" style="color: #412ecc;" align="center">
+                    <%
+                        if (request.getAttribute("res") != null) {
+                            out.println(request.getAttribute("res"));
+                        }
+                    %>
+                </div>
+            </div>
+            <div class="col-2">
+                <a href="index.jsp?pag=jspCitasD.jsp&sem=<%=Integer.parseInt(semA) + 1%>"><span class="carousel-control-next-icon" aria-hidden="true"></span></a>
+            </div>
         </div>
+
     </div>
+
     <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
         <div class="cd-schedule__timeline">
             <ul>
