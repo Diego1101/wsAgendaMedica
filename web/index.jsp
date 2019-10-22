@@ -94,6 +94,5 @@
         <script type="text/javascript" src="js/image-effect.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFZjOV0KA68G2YAh-rn7I3qKqCQEh_Ja0&callback=myMap">
         </script>
-
     </body>
 </html>

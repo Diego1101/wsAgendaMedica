@@ -1,0 +1,96 @@
+INSERT INTO CITA VALUES(NULL,3,2,0,'2019-10-20 14:00:00', 83, 1.8, 118/76, 'Niveles normales', 'Influenza','Nimesulida 100mg',0);
+INSERT INTO CITA VALUES(NULL,3,2,0,'2019-10-21 15:00:00', 83, 1.8, 121/78, 'Niveles normales', 'Sida','Cloruro de potasio 1 dosis.',0);
+INSERT INTO CITA VALUES(NULL,3,2,0,'2019-11-21 09:00:00', 83, 1.8, 110/73, 'Niveles anormales', 'Lombrices','Loperamida 100mg, Loxcell 2 tomas.',0);
+INSERT INTO CITA VALUES(NULL,5,2,0,'2019-10-22 13:00:00', 83, 1.8, 140/92, 'Niveles normales', 'Irritación anal','Hipogloss aplicar 2 veces al día.',0);
+INSERT INTO CITA VALUES(NULL,5,2,0,'2019-10-23 10:00:00', 83, 1.8, 125/86, 'Niveles anormales', 'Diarrea intensa con goteo','Butilhioscina con metamizol sódico 1 cada comida',0);
+
+INSERT INTO CITA VALUES(NULL,5,4,0,'2019-10-22 13:00:00', 83, 1.8, 140/92, 'Niveles normales', 'Irritación anal extrema','Hipogloss aplicar 2 veces al día.',0);
+INSERT INTO CITA VALUES(NULL,5,4,0,'2019-10-23 10:00:00', 83, 1.8, 125/86, 'Niveles anormales', 'Diarrea intensa con goteo y sangrado rectal','Butilhioscina con metamizol sódico 1 cada comida',0);
+
+INSERT INTO TIPO_USUARIO VALUES(NULL, 'PACIENTE');
+INSERT INTO TIPO_USUARIO VALUES(NULL, 'DOCTOR');
+
+INSERT INTO USUARIO VALUES(NULL, 1, 'dig', 'dig', 'dig@mail.com', '', 'Diego', 'Mendoza', 1, now());
+INSERT INTO USUARIO VALUES(NULL, 2, 'doc', 'doc', 'doc@mail.com', '', 'Doctor', 'Profesor', 1, now());
+INSERT INTO USUARIO VALUES(NULL, 2, 'D2', 'D2', 'doctor@mail.com', '', 'Cándido', 'Pérez', 1, now());
+
+
+DELIMITER $$
+CREATE PROCEDURE tspIniciarSesion
+(
+IN USU VARCHAR(50),
+IN PSW VARCHAR(50)
+)
+BEGIN
+IF EXISTS(SELECT US_ID FROM USUARIO WHERE US_USUARIO=USU AND US_CONTRA = PSW AND US_ESTATUS=1) THEN
+	SELECT US_ID ID, US_NOMBRE NOMBRE, US_AP AP, US_ID_TP ROL	
+	FROM USUARIO
+	WHERE US_USUARIO=USU AND US_CONTRA = PSW AND US_ESTATUS=1;
+ELSE
+	SELECT '0' ID;
+END IF;
+END $$
+
+
+DELIMITER %%
+CREATE PROCEDURE stpRegistrarPaciente
+(
+	IN 	USU 	VARCHAR(20),
+	IN 	CON 	VARCHAR(20),
+	IN 	CORREO 	VARCHAR(20),
+	IN 	FOTO 	VARCHAR(500),
+	IN 	NOM 	VARCHAR(20),
+	IN 	APE 	VARCHAR(20),
+	IN	ALE		VARCHAR(200)
+)
+BEGIN
+	IF EXISTS(SELECT US_ID FROM USUARIO WHERE US_USUARIO=USU) THEN
+		SELECT '0';
+	ELSE
+		INSERT INTO USUARIO VALUES(NULL, 1, USU, CON, CORREO, FOTO, NOM, APE, 1, now());
+		INSERT INTO PACIENTE VALUES(NULL, last_insert_id(), '',ALE);
+		SELECT 1;
+END IF;
+END %%
+
+CALL stpRegistrarPaciente('Ykurgan', '123456', 'volalol1@hotmail.com', '', 'Luis Eduardo', 'Jiménez Sol', 'No');
+CALL stpRegistrarPaciente('Cahum', '123456', 'ch@hotmail.com', '', 'Hortencio', 'Majete Hunpete', 'Látex, Vaselina, Agua y colorantes artificiales Amarillo 5 y Rojo Carmesí');
+
+SELECT * FROM USUARIO;
+SELECT * FROM PACIENTE;
+SELECT * FROM CITA;
+
+
+-- SELECT  B.US_ID CLAVE, CONCAT(US_NOMBRE,' ',US_AP) NOMBRE, C.CI_ID 'NO. CITA',A.PA_ALERGIAS ALERGIAS, C.CI_ESTATUS ESTATUS, C.CI_FECHA FECHA FROM PACIENTE A, USUARIO B, CITA C WHERE CI_ESTATUS = 0 AND B.US_ID=A.PA_ID_US AND B.US_ID=C.CI_ID_PA;
+
+DELIMITER %%
+CREATE PROCEDURE stpMostrarCitas
+(
+IN ID_DOC INT
+)
+BEGIN
+	IF EXISTS(SELECT * FROM CITA) THEN
+		SELECT  B.US_ID CLAVE, CONCAT(US_NOMBRE,' ',US_AP) NOMBRE, C.CI_DIAGNOSTICO DIAGNÓSTICO,C.CI_ID 'NO. CITA',A.PA_ALERGIAS ALERGIAS, C.CI_ESTATUS ESTATUS, C.CI_FECHA FECHA FROM PACIENTE A, USUARIO B, CITA C WHERE CI_ESTATUS = 0 AND B.US_ID=A.PA_ID_US AND B.US_ID=C.CI_ID_PA AND ID_DOC=C.CI_ID_DO;
+	ELSE
+		SELECT '0';
+END IF;
+END %%
+
+CALL stpMostrarCitas(4);
+
+
+DELIMITER %%
+CREATE PROCEDURE stpCancelarCita
+(
+IN ID_CITA INT
+)
+BEGIN
+	IF EXISTS(SELECT * FROM CITA WHERE CI_ID=ID_CITA) THEN
+		UPDATE CITA SET CI_ESTATUS = 2 WHERE CI_ID=ID_CITA;
+		SELECT '1'; -- CANCELADA
+	ELSE
+		SELECT '0'; -- ALGO SALIÓ MAL
+END IF;
+END %%
+
+CALL stpCancelarCita(7);

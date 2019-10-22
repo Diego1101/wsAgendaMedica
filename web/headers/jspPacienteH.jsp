@@ -8,7 +8,7 @@
 
 <!---Start navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar fixed-top  navbar-light bg-light">
-    <a class="navbar-brand" href="#Welcome">
+    <a class="navbar-brand" href="index.jsp">
         <img src="images/logo.png" width="50" height="50" class="d-inline-block" alt=""> <%=request.getSession().getAttribute("nombre")%>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,7 @@
                 <a class="nav-link" href="#">Mis citas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Agendar cita</a>
+                <a class="nav-link" href="especialidades.do">Agendar cita</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Mis datos</a>

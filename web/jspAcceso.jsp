@@ -39,7 +39,7 @@
                             <input type="submit" id="btnIniciar" name="btnIniciar" value="Aceptar" class="btn btn-secondary btn-block">
                             <input type="hidden" id="origen" name="origen" value="acceso">
                             <div>
-                                No tienes cuenta? Crea una <a href="#">aquí</a>
+                                ¿No tienes cuenta? Crea una <a href="index.jsp?pag=jspRegistrarPerfil.jsp">aquí</a>
                             </div> 
                         </form>
                     </div>
