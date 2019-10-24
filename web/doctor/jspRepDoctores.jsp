@@ -21,7 +21,7 @@
                     <%
                         }
                     %>
-                    <h2>Pacientes</h2>
+                    <h2>Doctores</h2>
                     <div class="container mt-5" style="justify-content: center;">
                         <form action="doctor.do" method="post" id="errepePacientes" name="errepePacientes">
                             <div class="form-row mb-3" style="margin-left: 35%"> 

@@ -19,7 +19,7 @@
                     <%
                         }
                     %>
-                    <h2>Pacientes</h2>
+                    <h2>Citas confirmadas</h2>
                     <div class="container mt-5" style="justify-content: center;">
                         <form action="doctor.do" method="post" id="rpCitConfirnadas" name="rpCitConfirmadas">
                             <div class="form-row mb-3" style="margin-left: 35%"> 
@@ -67,7 +67,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="7" style="text-align: right; background: #e4e4e4;">
-                                                <a href="jspExRCCo.jsp">
+                                                <a href="./doctor/jspExRCCo.jsp">
                                                     Exportar a Excel
                                                 </a>
                                             </td>

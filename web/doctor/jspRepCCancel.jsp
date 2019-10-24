@@ -20,7 +20,7 @@
                     <%
                         }
                     %>
-                    <h2>Pacientes</h2>
+                    <h2>Citas canceladas</h2>
                     <div class="container mt-5" style="justify-content: center;">
                         <form action="doctor.do" method="post" id="rpCitCanceladas" name="rpCitCanceladas">
                             <div class="form-row mb-3" style="margin-left: 35%"> 
