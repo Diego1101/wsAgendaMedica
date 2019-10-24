@@ -70,29 +70,18 @@ public class doctor extends HttpServlet {
                 
             case "errepeDoctores":
                 reporteDoctores(request,response);
-                
-                request.setAttribute("pag", "jspRepDoctores.jsp");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
             
             case "errepeCitCanceladas":
                 reporteCCanceladas(request,response);
-
-                request.setAttribute("pag", "jspRepCCancel.jsp");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
                 
             case "errepeCitConfirmadas":
                 reporteCConfirmadas(request, response);
-                request.setAttribute("pag", "jspRepCConf.jsp");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
                 
             case "errepePacientes":
                 reportePacientes(request,response);
-                
-                request.setAttribute("pag", "jspRepPaciente.jsp");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
 
             case "regMedico":
@@ -341,8 +330,8 @@ public class doctor extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
             }
-            request.getSession().setAttribute("rol","2");
-            request.setAttribute("pag", "jspRepPaciente.jsp");
+            
+            request.setAttribute("pag", "jspRepDoctores.jsp");
             request.getRequestDispatcher("index.jsp").forward(request, response);
 
     }
@@ -365,9 +354,8 @@ public class doctor extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        request.setAttribute("pag", "jspRepCCancel.jsp");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.setAttribute("pag", "jspRepCCancel.jsp");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
 
     }
     private void reporteCConfirmadas(HttpServletRequest request, HttpServletResponse response)
@@ -414,9 +402,8 @@ public class doctor extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
+        request.setAttribute("pag", "jspRepPaciente.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
