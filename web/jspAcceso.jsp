@@ -1,8 +1,3 @@
-<%-- 
-    Document   : jspAcceso
-    Created on : 15/10/2019, 08:32:53 PM
-    Author     : diego
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

@@ -84,7 +84,6 @@ public class clsDoctor extends clsUsuario {
         String consultaSql;
         Statement st;
         consultaSql = "call tspRegistrarDoctor('"+nombre+"','"+ap+"','"+usuario+"','"+contra+"','"+correo+"','"+estudios+"',"+esp+",'"+horario+"')";
-        System.out.println(consultaSql);
         st = (Statement) cnn.createStatement();
         rs = st.executeQuery(consultaSql);
         String res="-1";
@@ -93,6 +92,15 @@ public class clsDoctor extends clsUsuario {
         }
         rs.close();
         return res;
+    }
+    
+    public ResultSet docxEsp(String id) throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "SELECT DO_ID ID, CONCAT(US_NOMBRE, ' ', US_AP) NOMBRE  FROM DOCTOR, USUARIO WHERE DO_ID_ES="+id+" AND US_ID=DO_ID_US";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
     }
     
 

@@ -90,9 +90,7 @@ public class clsUsuario {
         String consultaSql;
         Statement st;
         consultaSql = "call tspIniciarSesion('" + usuario + "', '" + pwd + "')";
-        //Establecer ejecucion de comando
         st = (Statement) cnn.createStatement();
-        //ejecuta ek comando
         rs = st.executeQuery(consultaSql);
         return rs;
     }

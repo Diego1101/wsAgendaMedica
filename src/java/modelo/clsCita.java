@@ -12,10 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- *
- * @author diego
- */
 public class clsCita {
     
     private Connection cnn;
@@ -212,5 +208,30 @@ public class clsCita {
         rs = st.executeQuery(consultaSql);
         return rs;
     }
+  
+    public ResultSet listarHoras(String mes, String dia, int idDoc) throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "call tspListarHoras('"+dia+"','"+mes+"',"+idDoc+")";
+        System.out.println(consultaSql);
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
+        
+    }
     
+     public String registrarCita(int paciente, int doctor, int hora, String fecha) throws SQLException {
+        String consultaSql;
+        Statement st;
+        consultaSql = "call stpAgendarCita(" + paciente + "," + doctor + "," + hora + ", '" + fecha + "')";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+         String res="-1";
+        while(rs.next()){
+            res=rs.getString(1);
+        }
+        rs.close();
+        return res;
+    }
+        
 }
