@@ -20,7 +20,7 @@
                 <a class="nav-link" href="#">Mis citas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Agendar cita</a>
+                <a class="nav-link" href="index.jsp?pag=jspAgendarCita.jsp">Agendar cita</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Mis datos</a>
