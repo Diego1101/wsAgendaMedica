@@ -74,7 +74,7 @@ public class clsUsuario {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            cnn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/AGENDA", "root", "3209");
+            cnn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/AGENDA", "root", "kakabfiio13");
             System.out.println("Se hizo la conexion a la base de datos");
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("No se conecto: " + e.getMessage());
@@ -95,6 +95,13 @@ public class clsUsuario {
         return rs;
     }
     
-  
+    public ResultSet registrarPaciente(String Usuario, String Contra, String Correo, String Nombre, String Apellidos, String Alergias) throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "CALL stpRegistrarPaciente('"+Usuario+"', '"+Contra+"', '"+Correo+"', '', '"+ Nombre +"', '" +Apellidos+"', '"+Alergias+"');";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
+    }
 
 }

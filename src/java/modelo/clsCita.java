@@ -173,7 +173,42 @@ public class clsCita {
         return resultado;
     }
 
+    public ResultSet mostrarCCanceladas(int id) throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "CALL stpCitasCanceladas("+id+")";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
+    }
     
+    public ResultSet mostrarCConfirmadas(int id) throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "CALL stpCitasConfimadas("+id+")";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
+    }
+    
+    public ResultSet mostrarDoctores() throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "CALL stpReporteDoctor()";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
+    }
+    
+    public ResultSet mostrarPacientes() throws SQLException{
+        String consultaSql;
+        Statement st;
+        consultaSql = "CALL stpPacientes()";
+        st = (Statement) cnn.createStatement();
+        rs = st.executeQuery(consultaSql);
+        return rs;
+    }
+  
     public ResultSet listarHoras(String mes, String dia, int idDoc) throws SQLException{
         String consultaSql;
         Statement st;
@@ -198,7 +233,5 @@ public class clsCita {
         rs.close();
         return res;
     }
-    
-    
-    
+        
 }
