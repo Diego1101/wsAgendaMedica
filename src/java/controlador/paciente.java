@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modelo.clsCita;
 import modelo.clsUsuario;
 
 /**
@@ -41,7 +42,9 @@ public class paciente extends HttpServlet {
             case "acceso":
                  iniciarSesion(request, response);
                 break;
-                
+            case "regPaciente":
+                registrarPaciente(request, response);
+                break;
             default:
                 break;
             
@@ -79,6 +82,39 @@ public class paciente extends HttpServlet {
             else{
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        void registrarPaciente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        clsUsuario obj = new clsUsuario();
+        String Usuario = request.getParameter("txtUser");
+        String Contra = request.getParameter("txtPass");
+        String Correo = request.getParameter("txtCorreo");
+        String Nombre = request.getParameter("txtNombre");
+        String Apellidos = request.getParameter("txtApellidos");
+        String Alergias = request.getParameter("txtAlergias");  
+        
+        try {
+            obj.conexion();
+            ResultSet rs=obj.registrarPaciente(Usuario, Contra, Correo, Nombre, Apellidos, Alergias);
+            while (rs.next()){
+                if(rs.getString(1).equals("1")){
+                     try (PrintWriter out = response.getWriter()) {
+                         request.setAttribute("es", "Se ha registrado correctamente al paciente "+Nombre +" "+ Apellidos+".");
+                     }
+                }
+                else{
+                    try (PrintWriter out = response.getWriter()) {
+                        request.setAttribute("es", "Ya existe un usuario registrado con ese nombre, intenta de nuevo.");
+                    }
+                }
+            }
+            rs.close();
+            request.setAttribute("pag", "jspRegistro.jsp");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
             
         } catch (SQLException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);

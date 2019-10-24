@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import modelo.clsCita;
 import modelo.clsDoctor;
 import modelo.clsEspecialidad;
+import modelo.clsUsuario;
 
 /**
  *
@@ -65,6 +66,33 @@ public class doctor extends HttpServlet {
                 request.setAttribute("pag", "jspMedicos.jsp");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
 
+                break;
+                
+            case "errepeDoctores":
+                reporteDoctores(request,response);
+                
+                request.setAttribute("pag", "jspRepDoctores.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
+            
+            case "errepeCitCanceladas":
+                reporteCCanceladas(request,response);
+
+                request.setAttribute("pag", "jspRepCCancel.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
+                
+            case "errepeCitConfirmadas":
+                reporteCConfirmadas(request, response);
+                request.setAttribute("pag", "jspRepCConf.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
+                
+            case "errepePacientes":
+                reportePacientes(request,response);
+                
+                request.setAttribute("pag", "jspRepPaciente.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
 
             case "regMedico":
@@ -292,6 +320,102 @@ public class doctor extends HttpServlet {
 
         request.setAttribute("ban", "1");
         request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+    
+    private void reporteDoctores(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+                clsCita obj = new clsCita();
+            try {
+                obj.conexion();
+                ResultSet rs=obj.mostrarDoctores();
+                while (rs.next()){
+                    if(rs.getString(1).equals("0")){
+                        request.setAttribute("es", "No existen doctores registrados.");
+                    }
+                    else{
+                        request.getSession().setAttribute("rsReporte", rs);
+                    }
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            request.getSession().setAttribute("rol","2");
+            request.setAttribute("pag", "jspRepPaciente.jsp");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+    private void reporteCCanceladas(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+                clsCita obj = new clsCita();
+                int id = Integer.parseInt(request.getAttribute("id").toString());
+            try {
+                obj.conexion();
+                ResultSet rs=obj.mostrarCCanceladas(id);
+                while (rs.next()){
+                    if(rs.getString(1).equals("0")){
+                        request.setAttribute("es", "No hay citas canceladas.");
+                    }
+                    else{
+                        request.getSession().setAttribute("rsReporte", rs);
+                    }
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        request.setAttribute("pag", "jspRepCCancel.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+    private void reporteCConfirmadas(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+                clsCita obj = new clsCita();
+                int id = Integer.parseInt(request.getAttribute("id").toString());
+        try {
+            obj.conexion();
+            ResultSet rs=obj.mostrarCConfirmadas(id);
+            while (rs.next()){
+                if(rs.getString(1).equals("0")){
+                    request.setAttribute("es", "No hay citas confirmadas.");
+                }
+                else{
+                    request.getSession().setAttribute("rsReporte", rs);
+                }
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        request.setAttribute("pag", "jspRepCConf.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+    private void reportePacientes(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        clsCita obj = new clsCita();
+        
+        try {
+            obj.conexion();
+            ResultSet rs=obj.mostrarPacientes();
+            while (rs.next()){
+                if(rs.getString(1).equals("0")){
+                    request.setAttribute("es", "No existen pacientes registrados.");
+                }
+                else{
+                    request.getSession().setAttribute("rsReporte", rs);
+                }
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
 
     }
 
