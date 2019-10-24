@@ -57,12 +57,23 @@ public class doctor extends HttpServlet {
             case "terminarCita":
                 modEsCita(request, response);
                 break;
+
             case "infoMedicos":
                 listarEspecialidades(request, response);
                 //listarMedicos();
                 //
                 request.setAttribute("ban", "1");
                 request.setAttribute("pag", "jspMedicos.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+                break;
+
+            case "agendarCitaIn":
+                listarEspecialidades(request, response);
+                //listarMedicos();
+                //
+                request.setAttribute("ban", "1");
+                request.setAttribute("pag", "jspAgendarCita.jsp");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
 
                 break;
@@ -75,9 +86,89 @@ public class doctor extends HttpServlet {
                 request.getRequestDispatcher("index.jsp").forward(request, response);
                 break;
 
+            case "docxEsp":
+                docxEsp(request, response);
+                break;
+
+            case "listHoras":
+                listarHoras(request, response);
+                break;
+
+            case "agendarCita":
+                agendarCita(request, response);
+                listarEspecialidades(request, response);
+                request.setAttribute("ban", "1");
+                request.setAttribute("pag", "jspAgendarCita.jsp");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+                break;
+
             default:
                 break;
 
+        }
+    }
+
+    protected void agendarCita(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int doc = Integer.parseInt(request.getParameter("dpDoctor"));
+        int paciente = Integer.parseInt(request.getSession().getAttribute("id").toString());
+        int hora = Integer.parseInt(request.getParameter("dpHora"));;
+        String fecha = "2019-" + request.getParameter("m") + "-" + request.getParameter("d");
+
+        if (doc != 0 && paciente != 0 && hora != 0 && !request.getParameter("m").equals("0") && !request.getParameter("d").equals("0")) {
+            try {
+                clsCita cita = new clsCita();
+                cita.conexion();
+                String resultado = cita.registrarCita(paciente, doc, hora, fecha);
+                if (resultado.equals("0")) {
+                    request.setAttribute("es", "Horario ocupado");
+
+                } else if (resultado.equals("2")) {
+
+                    request.setAttribute("es", "No se puede agendar antes");
+                } else if (resultado.equals("1")) {
+
+                    request.setAttribute("es", "Cita agregada");
+                } else {
+
+                    request.setAttribute("es", "Error");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+
+            request.setAttribute("es", "Completar todos los campos");
+        }
+
+    }
+
+    protected void docxEsp(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+
+            String id = request.getParameter("id");
+            clsDoctor doc = new clsDoctor();
+            doc.conexion();
+            ResultSet rs = doc.docxEsp(id);
+
+            response.setContentType("text/html;charset=UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+                out.println("<div class='listMedicos'>");
+                out.println("<select class=' custom-select' id='dpDoctor' name='dpDoctor'>");
+                out.println("<option value='0'>Seleccionar medico</option>");
+                while (rs.next()) {
+                    out.println("<option value=" + rs.getString(1) + ">" + rs.getString(2) + "</option>");
+                }
+                out.println("</select>");
+                out.println("</div>");
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -150,6 +241,35 @@ public class doctor extends HttpServlet {
                 request.setAttribute("es", "Error");
             }
 
+        } catch (SQLException ex) {
+            Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    protected void listarHoras(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String mes = request.getParameter("m");
+        String dia = request.getParameter("d");
+        int doc = Integer.parseInt(request.getParameter("id"));
+        try {
+            clsCita obj = new clsCita();
+            obj.conexion();
+            ResultSet rs = obj.listarHoras(mes, dia, doc);
+
+            response.setContentType("text/html;charset=UTF-8");
+            try (PrintWriter out = response.getWriter()) {
+                out.println("<div class='horas'>");
+                out.println("<select class='custom-select' id='dpHora' name='dpHora'>");
+                out.println("<option value='0'>Hora</option>");
+                while (rs.next()) {
+                    out.println("<option value=" + rs.getString(1) + ">" + rs.getString(1) + ":00</option>");
+                }
+                out.println("</select>");
+                out.println("</div>");
+            }
+
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : jspMedicos
-    Created on : 18/10/2019, 02:08:38 PM
-    Author     : diego
---%>
 
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -52,7 +47,7 @@
                         </div>
 
                         <div class="form-row mb-3">
-                            <input type="text" id="txtCorreo" name="txtCorreo" value="" placeholder="Correo electrónico" class="form-control" required/>
+                            <input type="email" id="txtCorreo" name="txtCorreo" value="" placeholder="Correo electrónico" class="form-control" required/>
 
                         </div>
                         <div class="form-row mb-3">
