@@ -36,11 +36,11 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="background: #0f2778; color: #e4e4e4 width: 10px;">Clave</td>
-                                            <td style="background: #0f2778; color: #e4e4e4 width: 20px;">Nombre</td>
-                                            <td style="background: #0f2778; color: #e4e4e4 width: 20px;">Correo</td>
-                                            <td style="background: #0f2778; color: #e4e4e4 width: 20px;">Antecedentes</td>
-                                            <td style="background: #0f2778; color: #e4e4e4 width: 20px;">Alergias</td>
+                                            <td style="background: #0f2778; color: #e4e4e4; width: 10px;">Clave</td>
+                                            <td style="background: #0f2778; color: #e4e4e4; width: 20px;">Nombre</td>
+                                            <td style="background: #0f2778; color: #e4e4e4; width: 20px;">Correo</td>
+                                            <td style="background: #0f2778; color: #e4e4e4; width: 20px;">Antecedentes</td>
+                                            <td style="background: #0f2778; color: #e4e4e4; width: 20px;">Alergias</td>
                                         </tr>
                                         <%
                                             ResultSet rsDoc = (ResultSet)request.getAttribute("rsReporte");

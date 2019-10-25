@@ -160,7 +160,6 @@
         httpRequest.onreadystatechange = function () {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 if (httpRequest.status === 200) {
-
                     var div = document.createElement('div');
                     div.innerHTML = (httpRequest.responseText).trim();
                     document.getElementsByClassName('listMedicos')[0].innerHTML = div.getElementsByClassName('listMedicos')[0].innerHTML;

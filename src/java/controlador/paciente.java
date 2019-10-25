@@ -35,87 +35,83 @@ public class paciente extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String org=request.getParameter("origen");
-        
-        switch(org){
+
+        String org = request.getParameter("origen");
+
+        switch (org) {
             case "acceso":
-                 iniciarSesion(request, response);
+                iniciarSesion(request, response);
                 break;
             case "regPaciente":
                 registrarPaciente(request, response);
                 break;
             default:
                 break;
-            
+
         }
     }
-    
+
     void iniciarSesion(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
-        String usuario=request.getParameter("txtUsuario");
-        String pwd=request.getParameter("txtContra");
+            throws ServletException, IOException {
+        String usuario = request.getParameter("txtUsuario");
+        String pwd = request.getParameter("txtContra");
         clsUsuario obj = new clsUsuario();
         try {
             obj.conexion();
-        
-            ResultSet rs=obj.validarAcceso(usuario, pwd);
-            String estado="";
-            while (rs.next()){
-                if(!rs.getString(1).equals("0")){
-                    estado="1";
-                    request.getSession().setAttribute("id",rs.getString(1));
-                    request.getSession().setAttribute("nombre",rs.getString(2)+" "+rs.getString(3));
-                    request.getSession().setAttribute("rol",rs.getString(4));
-                }
-                else{
-                    estado="Datos incorrectos";
+
+            ResultSet rs = obj.validarAcceso(usuario, pwd);
+            String estado = "";
+            while (rs.next()) {
+                if (!rs.getString(1).equals("0")) {
+                    estado = "1";
+                    request.getSession().setAttribute("id", rs.getString(1));
+                    request.getSession().setAttribute("nombre", rs.getString(2) + " " + rs.getString(3));
+                    request.getSession().setAttribute("rol", rs.getString(4));
+                } else {
+                    estado = "Datos incorrectos";
                 }
             }
-            
+
             rs.close();
-            if(!estado.equals("1")){
+            if (!estado.equals("1")) {
                 request.setAttribute("es", estado);
                 request.setAttribute("pag", "jspAcceso.jsp");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
-            }
-            else{
+            } else {
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        void registrarPaciente(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+
+    void registrarPaciente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         clsUsuario obj = new clsUsuario();
         String Usuario = request.getParameter("txtUser");
         String Contra = request.getParameter("txtPass");
         String Correo = request.getParameter("txtCorreo");
         String Nombre = request.getParameter("txtNombre");
         String Apellidos = request.getParameter("txtApellidos");
-        String Alergias = request.getParameter("txtAlergias");  
-        
+        String Alergias = request.getParameter("txtAlergias");
+
         try {
             obj.conexion();
-            ResultSet rs=obj.registrarPaciente(Usuario, Contra, Correo, Nombre, Apellidos, Alergias);
-            while (rs.next()){
-                if(rs.getString(1).equals("1")){
-                     try (PrintWriter out = response.getWriter()) {
-                         request.setAttribute("es", "Se ha registrado correctamente al paciente "+Nombre +" "+ Apellidos+".");
-                     }
-                }
-                else{
-                    try (PrintWriter out = response.getWriter()) {
-                        request.setAttribute("es", "Ya existe un usuario registrado con ese nombre, intenta de nuevo.");
-                    }
+            ResultSet rs = obj.registrarPaciente(Usuario, Contra, Correo, Nombre, Apellidos, Alergias);
+            while (rs.next()) {
+                if (rs.getString(1).equals("1")) {
+                    request.setAttribute("es", "Se ha registrado correctamente al paciente " + Nombre + " " + Apellidos + ".");
+
+                } else {
+                    request.setAttribute("es", "Ya existe un usuario registrado con ese nombre, intenta de nuevo.");
+
                 }
             }
             rs.close();
             request.setAttribute("pag", "jspRegistro.jsp");
             request.getRequestDispatcher("index.jsp").forward(request, response);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
         }

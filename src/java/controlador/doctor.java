@@ -68,21 +68,21 @@ public class doctor extends HttpServlet {
                 request.getRequestDispatcher("index.jsp").forward(request, response);
 
                 break;
-                
+
             case "errepeDoctores":
-                reporteDoctores(request,response);
+                reporteDoctores(request, response);
                 break;
-            
+
             case "errepeCitCanceladas":
-                reporteCCanceladas(request,response);
+                reporteCCanceladas(request, response);
                 break;
-                
+
             case "errepeCitConfirmadas":
                 reporteCConfirmadas(request, response);
                 break;
-                
+
             case "errepePacientes":
-                reportePacientes(request,response);
+                reportePacientes(request, response);
                 break;
 
             case "agendarCitaIn":
@@ -128,35 +128,40 @@ public class doctor extends HttpServlet {
 
     protected void agendarCita(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int doc = Integer.parseInt(request.getParameter("dpDoctor"));
-        int paciente = Integer.parseInt(request.getSession().getAttribute("id").toString());
-        int hora = Integer.parseInt(request.getParameter("dpHora"));;
-        String fecha = "2019-" + request.getParameter("m") + "-" + request.getParameter("d");
+        try {
 
-        if (doc != 0 && paciente != 0 && hora != 0 && !request.getParameter("m").equals("0") && !request.getParameter("d").equals("0")) {
-            try {
-                clsCita cita = new clsCita();
-                cita.conexion();
-                String resultado = cita.registrarCita(paciente, doc, hora, fecha);
-                if (resultado.equals("0")) {
-                    request.setAttribute("es", "Horario ocupado");
+            int doc = Integer.parseInt(request.getParameter("dpDoctor"));
+            int paciente = Integer.parseInt(request.getSession().getAttribute("id").toString());
+            int hora = Integer.parseInt(request.getParameter("dpHora"));;
+            String fecha = "2019-" + request.getParameter("m") + "-" + request.getParameter("d");
 
-                } else if (resultado.equals("2")) {
+            if (doc != 0 && paciente != 0 && hora != 0 && !request.getParameter("m").equals("0") && !request.getParameter("d").equals("0")) {
+                try {
+                    clsCita cita = new clsCita();
+                    cita.conexion();
+                    String resultado = cita.registrarCita(paciente, doc, hora, fecha);
+                    if (resultado.equals("0")) {
+                        request.setAttribute("es", "Horario ocupado");
 
-                    request.setAttribute("es", "No se puede agendar antes");
-                } else if (resultado.equals("1")) {
+                    } else if (resultado.equals("2")) {
 
-                    request.setAttribute("es", "Cita agregada");
-                } else {
+                        request.setAttribute("es", "No se puede agendar antes de hoy");
+                    } else if (resultado.equals("1")) {
 
-                    request.setAttribute("es", "Error");
+                        request.setAttribute("es", "Cita agregada");
+                    } else {
+
+                        request.setAttribute("es", "Error");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(doctor.class.getName()).log(Level.SEVERE, null, ex);
+
+            } else {
+
+                request.setAttribute("es", "Completar todos los campos");
             }
-
-        } else {
-
+        } catch (NumberFormatException | NullPointerException ex) {
             request.setAttribute("es", "Completar todos los campos");
         }
 
@@ -431,69 +436,68 @@ public class doctor extends HttpServlet {
         request.getRequestDispatcher("index.jsp").forward(request, response);
 
     }
-    
+
     private void reporteDoctores(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                clsCita obj = new clsCita();
-            try {
-                obj.conexion();
-                ResultSet rs=obj.mostrarDoctores();
-                while (rs.next()){
-                    if(rs.getString(1).equals("0")){
-                        request.setAttribute("es", "No existen doctores registrados.");
-                    }
-                    else{
-                        request.getSession().setAttribute("rsReporte", rs);
-                    }
-                }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            request.setAttribute("pag", "jspRepDoctores.jsp");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-
-    }
-    private void reporteCCanceladas(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-                clsCita obj = new clsCita();
-                int id = Integer.parseInt(request.getAttribute("id").toString());
-            try {
-                obj.conexion();
-                ResultSet rs=obj.mostrarCCanceladas(id);
-                while (rs.next()){
-                    if(rs.getString(1).equals("0")){
-                        request.setAttribute("es", "No hay citas canceladas.");
-                    }
-                    else{
-                        request.getSession().setAttribute("rsReporte", rs);
-                    }
-                }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            request.setAttribute("pag", "jspRepCCancel.jsp");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-
-    }
-    private void reporteCConfirmadas(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-                clsCita obj = new clsCita();
-                int id = Integer.parseInt(request.getAttribute("id").toString());
+        clsCita obj = new clsCita();
         try {
             obj.conexion();
-            ResultSet rs=obj.mostrarCConfirmadas(id);
-            while (rs.next()){
-                if(rs.getString(1).equals("0")){
-                    request.setAttribute("es", "No hay citas confirmadas.");
-                }
-                else{
+            ResultSet rs = obj.mostrarDoctores();
+            while (rs.next()) {
+                if (rs.getString(1).equals("0")) {
+                    request.setAttribute("es", "No existen doctores registrados.");
+                } else {
                     request.getSession().setAttribute("rsReporte", rs);
                 }
             }
-            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        request.setAttribute("pag", "jspRepDoctores.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+
+    private void reporteCCanceladas(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        clsCita obj = new clsCita();
+        int id = Integer.parseInt(request.getAttribute("id").toString());
+        try {
+            obj.conexion();
+            ResultSet rs = obj.mostrarCCanceladas(id);
+            while (rs.next()) {
+                if (rs.getString(1).equals("0")) {
+                    request.setAttribute("es", "No hay citas canceladas.");
+                } else {
+                    request.getSession().setAttribute("rsReporte", rs);
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        request.setAttribute("pag", "jspRepCCancel.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+
+    }
+
+    private void reporteCConfirmadas(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        clsCita obj = new clsCita();
+        int id = Integer.parseInt(request.getAttribute("id").toString());
+        try {
+            obj.conexion();
+            ResultSet rs = obj.mostrarCConfirmadas(id);
+            while (rs.next()) {
+                if (rs.getString(1).equals("0")) {
+                    request.setAttribute("es", "No hay citas confirmadas.");
+                } else {
+                    request.getSession().setAttribute("rsReporte", rs);
+                }
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -502,23 +506,23 @@ public class doctor extends HttpServlet {
         request.getRequestDispatcher("index.jsp").forward(request, response);
 
     }
+
     private void reportePacientes(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         clsCita obj = new clsCita();
-        
+
         try {
             obj.conexion();
-            ResultSet rs=obj.mostrarPacientes();
-            while (rs.next()){
-                if(rs.getString(1).equals("0")){
+            ResultSet rs = obj.mostrarPacientes();
+            while (rs.next()) {
+                if (rs.getString(1).equals("0")) {
                     request.setAttribute("es", "No existen pacientes registrados.");
-                }
-                else{
+                } else {
                     request.getSession().setAttribute("rsReporte", rs);
                 }
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
         }

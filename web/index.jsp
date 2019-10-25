@@ -23,8 +23,7 @@
         else if(rol.equals("1")){
             rol="headers/jspPacienteH.jsp";
             dir="paciente/";
-            pagina = "jspCitasP.jsp";
-                    
+            pagina = "jspAgendarCita.jsp";
         }
         else{
             rol="headers/jspPrincipalH.jsp";
